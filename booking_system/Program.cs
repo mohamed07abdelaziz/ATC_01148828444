@@ -15,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEventRepo, EventRepository>();
 builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddCors(options =>
@@ -58,7 +59,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseCors("AllowReactApp");
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

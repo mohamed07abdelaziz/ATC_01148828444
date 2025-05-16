@@ -33,5 +33,12 @@ namespace booking_system.Controllers
                 return Unauthorized("Invalid credentials");
             return Ok(result);
         }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+            var newTokens = await _authService.NewRefreshTokenAsync(refreshToken);
+            return Ok(newTokens);
+        }
     }
 }

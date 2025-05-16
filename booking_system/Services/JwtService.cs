@@ -28,8 +28,10 @@ namespace booking_system.Services
             {
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                 new Claim(ClaimTypes.NameIdentifier, user.Email),
+                new Claim(ClaimTypes.UserData, user.UserId.ToString()),
                 new Claim(ClaimTypes.Role, user.Role)
             };
+            Console.WriteLine("user roleee",user.Role);
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

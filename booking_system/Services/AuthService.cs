@@ -26,7 +26,7 @@ namespace booking_system.Services
 
             var token = _jwtService.GenerateJWTTOken(user);
             var refreshToken = _jwtService.GenerateRefreshToken();
-            _jwtService.SaveRefreshTokenAsync(refreshToken, user);
+            await _jwtService.SaveRefreshTokenAsync(refreshToken, user);
 
             return new AuthResponseDto
             {
