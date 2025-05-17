@@ -85,10 +85,54 @@ namespace booking_system.Controllers
         }
 
 
+
         //edit event only admin can edit
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateEvent(int id, [FromForm] EventDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var eventObj = await _eventRepo.GetEventByIdAsync(id);
+            if (eventObj == null)
+                return NotFound("Event not found");
+
+            // Update eventObj properties from dto
+            eventObj.Name = dto.Name;
+            eventObj.Description = dto.Description;
+            eventObj.Category = dto.Category;
+            eventObj.Date = dto.Date;
+            eventObj.Venue = dto.Venue;
+            eventObj.Price = dto.Price;
+
+            // If you want to update the image, handle dto.Image here
+
+            var result = await _eventRepo.UpdateEventAsync(eventObj, dto.Image);
+            if (!result)
+                return BadRequest("Failed to update event");
+            return Ok("Event updated successfully");
 
 
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            var eventObj = await _eventRepo.GetEventByIdAsync(id);
+            if (eventObj == null)
+                return NotFound("Event not found");
+
+            var result = await _eventRepo.DeleteEventAsync(id);
+            if (!result)
+                return BadRequest("Failed to delete event");
+
+            return Ok("Event deleted successfully");
+        }
 
 
     }
-}
+    }

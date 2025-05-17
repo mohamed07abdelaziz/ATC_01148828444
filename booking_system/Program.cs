@@ -1,5 +1,6 @@
 using booking_system.Interfaces;
 using booking_system.Repositories;
+using booking_system.Seed;
 using booking_system.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -62,5 +63,9 @@ app.UseCors("AllowReactApp");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+await DatabaseSeeder.SeedAdminUserAsync(app.Services);
+
 
 app.Run();

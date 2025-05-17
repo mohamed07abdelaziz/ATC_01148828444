@@ -69,16 +69,29 @@ namespace booking_system.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateEventAsync(Event eventObj)
+        public async Task<bool> UpdateEventAsync(Event eventObj, IFormFile image = null)
         {
+            if (image != null && image.Length > 0)
+            {
+                var fileName = $"{eventObj.EventId}_{image.FileName}";
+                var filePath = Path.Combine("wwwroot/images", fileName);
 
+                // Save the new image to the file system
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
 
+                // Update the ImageUrl property with the new image path
+                eventObj.ImageUrl = $"/images/{fileName}";
+            }
 
             _context.Events.Update(eventObj);
             return await SaveChangesAsync();
         }
 
-        
+
+
     }
 
 }
